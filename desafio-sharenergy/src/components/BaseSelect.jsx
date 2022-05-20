@@ -31,3 +31,5 @@ function BaseSelect({
     </FormControl>
   );
 }
+
+export default BaseSelect;
