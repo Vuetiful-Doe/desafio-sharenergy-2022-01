@@ -16,3 +16,52 @@ export async function getArticles(options = {}) {
 
   return [];
 }
+
+export async function getArticleById(articleId) {
+  if (!articleId) return;
+
+  try {
+    const article = await api.get(`/articles/${articleId}`);
+    return article?.data;
+  } catch (error) {
+    console.error(
+      `Erro ao tentar carregar o artigo de ID => (${articleId}): `,
+      error
+    );
+  }
+
+  return;
+}
+
+export async function getNextArticleId(articleId) {
+  if (!articleId) return;
+
+  const nextArticle = await getArticles({
+    params: {
+      _limit: 1,
+      id_gt: articleId,
+      _sort: "id:asc",
+    },
+  });
+
+  if (nextArticle?.length === 0 || nextArticle[0]?.id == undefined) return;
+
+  return nextArticle[0].id;
+}
+
+export async function getPreviousArticleId(articleId) {
+  if (!articleId) return;
+
+  const previousArticle = await getArticles({
+    params: {
+      _limit: 1,
+      id_lt: articleId,
+      _sort: "id:desc",
+    },
+  });
+
+  if (previousArticle?.length === 0 || previousArticle[0].id == undefined)
+    return;
+
+  return previousArticle[0].id;
+}
