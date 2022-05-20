@@ -78,3 +78,14 @@ export async function getArticlesByEventById(eventId) {
 
   return;
 }
+
+export async function getArticlesByLaunchId(launchId) {
+  if (!launchId) return;
+
+  try {
+    const launch = await api.get(`/articles/launch/${launchId}`);
+    return launch?.data;
+  } catch (error) {
+    console.error(`Erro ao tentar carregar lançamento de ID:(${launchId}) `, error);
+  }
+}
