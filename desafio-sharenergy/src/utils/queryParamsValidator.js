@@ -64,3 +64,5 @@ const validations = {
     return true
   }
 };
+
+export const articleParamsValidator = createParamsValidator(validations);
