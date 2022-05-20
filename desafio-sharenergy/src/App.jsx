@@ -15,6 +15,7 @@ function App() {
     <div className="app">
       <ChakraProvider theme={theme}>
         <BrowserRouter>
+        <Navbar />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/articles/:id" element={<ArticlePage />} />
