@@ -89,3 +89,36 @@ export async function getArticlesByLaunchId(launchId) {
     console.error(`Erro ao tentar carregar lançamento de ID:(${launchId}) `, error);
   }
 }
+
+export async function getAllRelatedArticles(
+  articleId,
+  topic,
+  nestedFetchFn = getArticlesByEventById
+) {
+  topic = ["events", "launches"].includes(topic) ? topic : "events";
+
+  try {
+    const mainArticle = await getArticleById(articleId);
+    if (mainArticle?.[topic]?.length > 0) {
+      const topicRelatedArticlesRequest = mainArticle[topic].map((event) =>
+        nestedFetchFn(event.id)
+      );
+
+      const settledRequests = await Promise.allSettled(
+        topicRelatedArticlesRequest
+      );
+
+      const relatedArticles = settledRequests
+        .filter((settledPromise) => settledPromise.status === "fulfilled")
+        .map((fulfilledPromise) => fulfilledPromise.value)
+        .reduce((allArticles, articlesRelatedToEvent) => {
+          allArticles.push(...articlesRelatedToEvent);
+          return allArticles;
+        }, []);
+
+      return relatedArticles;
+    }
+  } catch (error) {
+    console.error(`Erro ao tentar consultar os artigos relacionados ao artido de ID:(${articleId}) =>`, error);
+  }
+}
