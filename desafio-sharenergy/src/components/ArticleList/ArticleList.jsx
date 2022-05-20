@@ -16,7 +16,7 @@ const container = {
 
 function ArticleList({ articles }) {
 
-  console.log("@Article List (articles) =>",articles)
+ 
   return (
     <>
       {Array.isArray(articles) && articles.length > 0 ? (
