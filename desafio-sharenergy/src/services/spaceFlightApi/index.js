@@ -65,3 +65,16 @@ export async function getPreviousArticleId(articleId) {
 
   return previousArticle[0].id;
 }
+
+export async function getArticlesByEventById(eventId) {
+  if (!eventId) return;
+
+  try {
+    const event = await api.get(`/articles/event/${eventId}`);
+    return event?.data;
+  } catch (error) {
+    console.error(`Erro ao tentar carregar evento de ID:(${eventId}) =>`, error);
+  }
+
+  return;
+}
